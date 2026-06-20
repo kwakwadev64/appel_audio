@@ -233,10 +233,34 @@
             btnConnect.innerText = "Création de ligne...";
             btnConnect.disabled = true;
 
-            // Initialisation de l'instance PeerJS avec le numéro de téléphone comme ID
-            peer = new Peer(myNumber, {
-                debug: 2 // Log les erreurs et warnings dans la console
-            });
+            // ==========================================================
+            // CONFIGURATION ICE AVEC TURN POUR RÉSEAUX MOBILES
+            // ==========================================================
+            const peerConfig = {
+                debug: 2, // Logs détaillés dans la console
+                config: {
+                    iceServers: [
+                        // Serveurs STUN (découverte IP publique)
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        // Serveurs TURN (relais pour NAT symétriques)
+                        // Service public Metered.ca (gratuit, avec limites)
+                        {
+                            urls: 'turn:openrelay.metered.ca:80',
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
+                        },
+                        {
+                            urls: 'turn:openrelay.metered.ca:443',
+                            username: 'openrelayproject',
+                            credential: 'openrelayproject'
+                        }
+                    ]
+                }
+            };
+
+            // Initialisation de l'instance PeerJS avec la configuration
+            peer = new Peer(myNumber, peerConfig);
 
             peer.on('open', (id) => {
                 displayMyNumber.innerText = id;
@@ -244,15 +268,14 @@
             });
 
             peer.on('error', (err) => {
-                console.error(err);
-                alert("Erreur: Ce numéro de téléphone est déjà pris ou le serveur de signalisation est instable.");
+                console.error("Erreur PeerJS:", err);
+                alert("Erreur: Ce numéro est déjà pris ou le serveur de signalisation est instable.");
                 btnConnect.innerText = "Se connecter";
                 btnConnect.disabled = false;
             });
 
             // Gérer les appels entrants
             peer.on('call', (call) => {
-                // Stocke l'appel entrant pour pouvoir décider de l'accepter ou le refuser via l'interface
                 incomingStreamCall = call;
                 document.getElementById('display-incoming-caller').innerText = call.peer;
                 showScreen('incoming');
@@ -267,7 +290,6 @@
             } catch (err) {
                 console.error("Microphone inaccessible", err);
                 alert("L'accès au microphone est nécessaire pour utiliser cette application.");
-                // Fallback de secours si l'utilisateur refuse
                 btnConnect.innerText = "Se connecter";
                 btnConnect.disabled = false;
             }
@@ -287,6 +309,10 @@
             }
             if (targetNum === myNumber) {
                 alert("Vous ne pouvez pas vous appeler vous-même.");
+                return;
+            }
+            if (!localStream) {
+                alert("Microphone non disponible. Veuillez vous reconnecter.");
                 return;
             }
 
@@ -352,7 +378,7 @@
             });
 
             call.on('error', (err) => {
-                console.error(err);
+                console.error("Erreur lors de l'appel:", err);
                 terminateCallSession();
             });
         }
