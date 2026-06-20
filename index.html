@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VoiceLink - Appels Audio PeerJS</title>
-    <!-- Tailwind CSS pour une interface moderne -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome pour les icônes de contrôle d'appel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- PeerJS pour la connexion Peer-to-Peer -->
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
         /* Animation de pulsation fluide pour les ondes d'appel */
@@ -23,12 +20,8 @@
 </head>
 <body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 min-h-screen flex flex-col items-center justify-center p-4 font-sans text-white">
 
-    <!-- CONTENEUR PRINCIPAL DE L'APPLICATION (Style Téléphone / App) -->
     <div class="w-full max-w-md bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 relative min-h-[600px] flex flex-col justify-between overflow-hidden">
         
-        <!-- ============================================ -->
-        <!-- ÉCRAN 1 : CONNEXION (Saisie du numéro) -->
-        <!-- ============================================ -->
         <div id="screen-login" class="flex-grow flex flex-col justify-between py-6">
             <div class="text-center">
                 <div class="w-20 h-20 bg-indigo-600/20 text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-indigo-500/30">
@@ -54,11 +47,7 @@
             </button>
         </div>
 
-        <!-- ============================================ -->
-        <!-- ÉCRAN 2 : DIALER / COMPOSITEUR (Recherche) -->
-        <!-- ============================================ -->
         <div id="screen-dialer" class="hidden flex-grow flex flex-col justify-between py-6">
-            <!-- Header du Profil -->
             <div class="flex items-center justify-between bg-slate-950/40 p-4 rounded-2xl border border-slate-800/60 mb-6">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-400 border border-indigo-500/20">
@@ -74,7 +63,6 @@
                 </div>
             </div>
 
-            <!-- Saisie destinataire -->
             <div class="text-center my-auto space-y-6">
                 <h2 class="text-2xl font-bold">Qui voulez-vous joindre ?</h2>
                 <p class="text-sm text-slate-400">Saisissez son numéro de téléphone pour initier l'appel.</p>
@@ -82,15 +70,11 @@
                     class="w-full py-4 rounded-2xl bg-slate-950/60 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition text-lg font-mono font-bold tracking-widest text-center">
             </div>
 
-            <!-- Bouton d'action -->
             <button id="btn-initiate-call" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition py-4 rounded-2xl font-bold text-lg shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-3 mt-6">
                 <i class="fa-solid fa-phone"></i> Lancer l'appel
             </button>
         </div>
 
-        <!-- ============================================ -->
-        <!-- ÉCRAN 3 : APPEL SORTANT (En attente de réponse) -->
-        <!-- ============================================ -->
         <div id="screen-outgoing" class="hidden flex-grow flex flex-col justify-between py-6">
             <div class="text-center my-auto space-y-8">
                 <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
@@ -112,9 +96,6 @@
             </button>
         </div>
 
-        <!-- ============================================ -->
-        <!-- ÉCRAN 4 : APPEL ENTRANT (Quelqu'un appelle) -->
-        <!-- ============================================ -->
         <div id="screen-incoming" class="hidden flex-grow flex flex-col justify-between py-6">
             <div class="text-center my-auto space-y-8">
                 <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
@@ -131,7 +112,6 @@
                 </div>
             </div>
 
-            <!-- Double boutons (Accepter / Décliner) -->
             <div class="grid grid-cols-2 gap-4 mt-6">
                 <button id="btn-decline-call" class="bg-rose-600 hover:bg-rose-500 text-white py-4 rounded-2xl font-bold transition active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-rose-600/20">
                     <i class="fa-solid fa-phone-slash"></i> Refuser
@@ -142,12 +122,8 @@
             </div>
         </div>
 
-        <!-- ============================================ -->
-        <!-- ÉCRAN 5 : DISCUSSION ACTIVE (En ligne) -->
-        <!-- ============================================ -->
         <div id="screen-active" class="hidden flex-grow flex flex-col justify-between py-6">
             <div class="text-center my-auto space-y-6">
-                <!-- Avatar statique avec petites pulsations d'ambiance -->
                 <div class="relative w-32 h-32 mx-auto flex items-center justify-center">
                     <div class="absolute inset-0 rounded-full bg-indigo-500/5 pulse-wave"></div>
                     <div class="w-24 h-24 bg-slate-800 border border-slate-700 rounded-full flex items-center justify-center">
@@ -164,13 +140,10 @@
                 </div>
             </div>
 
-            <!-- Boutons de contrôle -->
             <div class="flex items-center justify-center gap-6 mt-6">
-                <!-- Mute -->
                 <button id="btn-mute" class="w-16 h-16 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white rounded-full flex items-center justify-center transition active:scale-90">
                     <i id="icon-mute" class="fa-solid fa-microphone text-xl"></i>
                 </button>
-                <!-- Raccrocher -->
                 <button id="btn-hangup" class="w-20 h-20 bg-rose-600 hover:bg-rose-500 text-white rounded-full flex items-center justify-center transition active:scale-90 shadow-lg shadow-rose-600/30">
                     <i class="fa-solid fa-phone-slash text-2xl"></i>
                 </button>
@@ -179,12 +152,8 @@
 
     </div>
 
-    <!-- AUDIO ELEMENT POUR LIRE LE SON ENTRANTS -->
     <audio id="remote-audio" autoplay class="hidden"></audio>
 
-    <!-- ============================================ -->
-    <!-- LOGIQUE JAVASCRIPT ET PEERJS -->
-    <!-- ============================================ -->
     <script>
         // --- NAVIGATION ENTRE LES ÉCRANS ---
         const screens = {
@@ -210,10 +179,9 @@
         let myNumber = "";
         let localStream = null;
         let currentCall = null;
-        let incomingStreamCall = null; // Stocke l'appel entrant en attente de validation
+        let incomingStreamCall = null; 
         let isMuted = false;
         
-        // Timer de conversation
         let timerInterval = null;
         let totalSeconds = 0;
 
@@ -233,34 +201,19 @@
             btnConnect.innerText = "Création de ligne...";
             btnConnect.disabled = true;
 
-            // ==========================================================
-            // CONFIGURATION ICE AVEC TURN POUR RÉSEAUX MOBILES
-            // ==========================================================
-            const peerConfig = {
-                debug: 2, // Logs détaillés dans la console
+            // CONFIGURATION DES SERVEURS POUR TRAVERSER LES ROUTEURS (STUN)
+            peer = new Peer(myNumber, {
+                debug: 2,
                 config: {
-                    iceServers: [
-                        // Serveurs STUN (découverte IP publique)
-                        { urls: 'stun:stun.l.google.com:19302' },
-                        { urls: 'stun:stun1.l.google.com:19302' },
-                        // Serveurs TURN (relais pour NAT symétriques)
-                        // Service public Metered.ca (gratuit, avec limites)
-                        {
-                            urls: 'turn:openrelay.metered.ca:80',
-                            username: 'openrelayproject',
-                            credential: 'openrelayproject'
-                        },
-                        {
-                            urls: 'turn:openrelay.metered.ca:443',
-                            username: 'openrelayproject',
-                            credential: 'openrelayproject'
-                        }
-                    ]
+                    'iceServers': [
+                        { 'urls': 'stun:stun.l.google.com:19302' },
+                        { 'urls': 'stun:stun1.l.google.com:19302' },
+                        { 'urls': 'stun:stun2.l.google.com:19302' },
+                        { 'urls': 'stun:stun3.l.google.com:19302' }
+                    ],
+                    'sdpSemantics': 'unified-plan'
                 }
-            };
-
-            // Initialisation de l'instance PeerJS avec la configuration
-            peer = new Peer(myNumber, peerConfig);
+            });
 
             peer.on('open', (id) => {
                 displayMyNumber.innerText = id;
@@ -268,34 +221,42 @@
             });
 
             peer.on('error', (err) => {
-                console.error("Erreur PeerJS:", err);
-                alert("Erreur: Ce numéro est déjà pris ou le serveur de signalisation est instable.");
+                console.error(err);
+                alert("Erreur de connexion. Ce numéro est peut-être déjà utilisé.");
                 btnConnect.innerText = "Se connecter";
                 btnConnect.disabled = false;
             });
 
-            // Gérer les appels entrants
+            // Réception d'un appel
             peer.on('call', (call) => {
                 incomingStreamCall = call;
                 document.getElementById('display-incoming-caller').innerText = call.peer;
                 showScreen('incoming');
+
+                // ÉCOUTE DE L'ANNULATION PAR L'ÉMETTEUR
+                // Si l'émetteur annule pendant que ça sonne chez nous
+                incomingStreamCall.on('close', () => {
+                    if (screens.incoming.classList.contains('hidden') === false) {
+                        terminateCallSession();
+                    }
+                });
             });
         });
 
-        // Demande d'accès au microphone
+        // Accès micro
         async function requestMicrophoneAccess() {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
                 showScreen('dialer');
             } catch (err) {
                 console.error("Microphone inaccessible", err);
-                alert("L'accès au microphone est nécessaire pour utiliser cette application.");
+                alert("L'accès au microphone est requis (Vérifiez le protocole HTTPS ou vos permissions).");
                 btnConnect.innerText = "Se connecter";
                 btnConnect.disabled = false;
             }
         }
 
-        // --- LOGIQUE DES APPELS SORTANTS ---
+        // --- ENVOI D'UN APPEL ---
         const inputTargetNumber = document.getElementById('input-target-number');
         const btnInitiateCall = document.getElementById('btn-initiate-call');
         const btnCancelCall = document.getElementById('btn-cancel-call');
@@ -303,44 +264,34 @@
 
         btnInitiateCall.addEventListener('click', () => {
             const targetNum = inputTargetNumber.value.trim();
-            if (!targetNum) {
-                alert("Veuillez saisir le numéro à joindre.");
-                return;
-            }
-            if (targetNum === myNumber) {
-                alert("Vous ne pouvez pas vous appeler vous-même.");
-                return;
-            }
-            if (!localStream) {
-                alert("Microphone non disponible. Veuillez vous reconnecter.");
+            if (!targetNum || targetNum === myNumber) {
+                alert("Numéro invalide.");
                 return;
             }
 
             displayOutgoingTarget.innerText = targetNum;
             showScreen('outgoing');
 
-            // Lancer l'appel PeerJS vers le correspondant
             const call = peer.call(targetNum, localStream);
             currentCall = call;
             handleCallWorkflow(call, targetNum);
         });
 
-        // Annuler l'appel sortant avant décrochage
+        // Annuler l'appel sortant avant réponse
         btnCancelCall.addEventListener('click', () => {
             if (currentCall) {
                 currentCall.close();
             }
-            showScreen('dialer');
+            terminateCallSession();
         });
 
-        // --- LOGIQUE DES APPELS ENTRANTS (INTERFACES GRAPHIQUES) ---
+        // --- GESTION DES BOUTONS DE L'APPEL ENTRANT ---
         const btnAcceptCall = document.getElementById('btn-accept-call');
         const btnDeclineCall = document.getElementById('btn-decline-call');
 
-        // Accepter l'appel
+        // Accepter
         btnAcceptCall.addEventListener('click', () => {
             if (incomingStreamCall) {
-                // Envoyer notre flux micro en retour
                 incomingStreamCall.answer(localStream);
                 currentCall = incomingStreamCall;
                 
@@ -350,40 +301,39 @@
             }
         });
 
-        // Refuser l'appel
+        // Refuser (FONCTIONNALITÉ RAJOUTÉE : Avertit l'émetteur instantanément)
         btnDeclineCall.addEventListener('click', () => {
             if (incomingStreamCall) {
-                incomingStreamCall.close();
+                incomingStreamCall.close(); // Envoie le signal d'arrêt à l'appelant
                 incomingStreamCall = null;
             }
-            showScreen('dialer');
+            terminateCallSession();
         });
 
-        // --- GESTION DU FLUX ACTIF ET DES ÉVÉNEMENTS ---
+        // --- WORKFLOW DES ÉVÉNEMENTS DE COMMUNICATION ---
         function handleCallWorkflow(call, correspondentNum) {
-            // Reception du flux de la personne connectée
+            // Quand le flux audio distant arrive
             call.on('stream', (remoteStream) => {
                 const remoteAudio = document.getElementById('remote-audio');
                 remoteAudio.srcObject = remoteStream;
                 
-                // Basculer vers l'écran de discussion active
                 document.getElementById('display-active-correspondent').innerText = correspondentNum;
                 showScreen('active');
                 startCallTimer();
             });
 
-            // Fermeture de l'appel par le correspondant
+            // Si l'autre côté raccroche OU refuse l'appel (Déclenche le close)
             call.on('close', () => {
                 terminateCallSession();
             });
 
             call.on('error', (err) => {
-                console.error("Erreur lors de l'appel:", err);
+                console.error(err);
                 terminateCallSession();
             });
         }
 
-        // Raccrocher l'appel actif
+        // Raccrocher en cours
         const btnHangup = document.getElementById('btn-hangup');
         btnHangup.addEventListener('click', () => {
             if (currentCall) {
@@ -392,23 +342,21 @@
             terminateCallSession();
         });
 
+        // Réinitialisation globale de l'interface
         function terminateCallSession() {
             stopCallTimer();
-            // Réinitialiser les flux audio
             const remoteAudio = document.getElementById('remote-audio');
-            remoteAudio.srcObject = null;
+            if (remoteAudio) remoteAudio.srcObject = null;
             currentCall = null;
             incomingStreamCall = null;
-            
-            // Revenir au compositeur
             showScreen('dialer');
         }
 
-        // --- CHRONOMÈTRE DE COMMUNICTION ---
+        // --- CHRONOMÈTRE ---
         const callTimerDisplay = document.getElementById('call-timer');
 
         function startCallTimer() {
-            stopCallTimer(); // Éviter les duplications
+            stopCallTimer();
             totalSeconds = 0;
             callTimerDisplay.innerText = "00:00";
             
@@ -427,19 +375,17 @@
             }
         }
 
-        // --- GESTION COUPE-MICRO (MUTE) ---
+        // --- COUPE-MICRO ---
         const btnMute = document.getElementById('btn-mute');
         const iconMute = document.getElementById('icon-mute');
 
         btnMute.addEventListener('click', () => {
             if (localStream) {
                 isMuted = !isMuted;
-                // Désactiver ou activer les pistes audio
                 localStream.getAudioTracks().forEach(track => {
                     track.enabled = !isMuted;
                 });
 
-                // Changement de style visuel
                 if (isMuted) {
                     btnMute.classList.replace('bg-slate-800', 'bg-rose-500/20');
                     btnMute.classList.replace('text-white', 'text-rose-500');
